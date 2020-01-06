@@ -1,0 +1,10 @@
+---
+
+-
+  hosts: ubuntu1
+
+  roles:
+#    - install_docker
+#    - install_mssql
+     - use_mssql
+...

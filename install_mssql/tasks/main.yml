@@ -1,0 +1,17 @@
+---
+# tasks file for install_mssql
+
+- name: Pull mssql image
+  docker_image:
+    name: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+
+- name: run docker image
+  docker_container:
+    env:
+      ACCEPT_EULA: Y 
+      MSSQL_SA_PASSWORD: LiRong11821
+      MSSQL_PID: express
+    image: mcr.microsoft.com/mssql/server
+    name: mssql
+    state: started
+    ports: 1433:1433

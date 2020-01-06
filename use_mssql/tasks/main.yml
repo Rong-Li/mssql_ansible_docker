@@ -1,0 +1,51 @@
+---
+# tasks file for use_mssql
+- name: get get-pip.py
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: ~/get-pip.py
+
+# - name: run get-pip.py script
+#  command: python get-pip.py
+
+- name: run get-pip.py script from control host
+  script: ~/get-pip.py  
+
+- name: instal pymssql
+  pip: 
+    name: pymssql<3.0
+
+- name: make database
+  mssql_db:
+    name: my_db
+    state: present
+    login_host: localhost
+    login_user: SA
+    login_password: LiRong11821
+
+- name: sql file from Microsoft repo
+  copy:
+    src: ~/ansible/mssql/sample_data/sample.sql
+    dest: /tmp
+
+- name: import the sql file
+  mssql_db:
+    name: ms_repo_data
+    state: import
+    target: /tmp/sample.sql
+    login_host: localhost
+    login_user: SA
+    login_password: LiRong11821
+
+
+
+
+
+
+
+
+
+
+
+
+
