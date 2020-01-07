@@ -1,10 +1,11 @@
 ---
 
 -
-  hosts: ubuntu1
+  hosts: ubuntu2
 
   roles:
-#    - install_docker
-#    - install_mssql
-     - use_mssql
+    - install_docker
+    - install_mssql
+    - install_commandlinetool
+    - use_mssql
 ...

@@ -1,0 +1,24 @@
+---
+# tasks file for install_commandlinetool
+- name: install mssql-tools repo (ubuntu)
+  get_url:
+    url: https://packages.microsoft.com/config/ubuntu/16.04/prod.list
+    dest: /etc/apt/sources.list.d/mssql-tools.list
+  when: ansible_distribution == 'Ubuntu'
+
+- name: add apt signing key
+  apt_key: 
+    url: https://packages.microsoft.com/keys/microsoft.asc
+    state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: refresh apt-get cache for server repo (Ubuntu)
+  command: apt-get update
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install mssql-tools package 
+  package:
+    name: mssql-tools
+    state: latest
+  environment:
+    ACCEPT_EULA: 'y'

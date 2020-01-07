@@ -9,9 +9,10 @@
   docker_container:
     env:
       ACCEPT_EULA: Y 
-      MSSQL_SA_PASSWORD: LiRong11821
-      MSSQL_PID: express
-    image: mcr.microsoft.com/mssql/server
+      SA_PASSWORD: LiRong11821
+      MSSQL_PID: Express
+    image: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
     name: mssql
     state: started
     ports: 1433:1433
+  become: yes
