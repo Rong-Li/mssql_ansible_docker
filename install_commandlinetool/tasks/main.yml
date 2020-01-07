@@ -16,6 +16,16 @@
   command: apt-get update
   when: ansible_distribution == 'Ubuntu'
 
+- name: get repo
+  yum_repository:
+    name: package-microsoft-com-prod
+    state: present
+    description: Microsoft MSSQL commandline tool
+    baseurl: https://packages.microsoft.com/rhel/7/prod
+    gpgkey: https://packages.microsoft.com/keys/microsoft.acs
+    gpgcheck: yes
+  when: ansible_distribution == 'CentOS'
+
 - name: install mssql-tools package 
   package:
     name: mssql-tools

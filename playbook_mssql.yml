@@ -1,7 +1,7 @@
 ---
 
 -
-  hosts: ubuntu2
+  hosts: centos2
 
   roles:
     - install_docker

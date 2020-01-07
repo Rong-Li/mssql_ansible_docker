@@ -3,8 +3,12 @@
   when: ansible_distribution == 'Ubuntu'
 
 - name: Install required system packages
+  package: name={{ item }} state=latest update_cache=yes
+  loop: [ 'ca-certificates', 'curl', 'python-pip', 'python-setuptools']
+
+- name: Install rest of Ubuntu dependencies
   apt: name={{ item }} state=latest update_cache=yes
-  loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python-pip', 'virtualenv', 'python-setuptools']
+  loop: ['apt-transport-https', 'software-properties-common', 'virtualenv']
   when: ansible_distribution == 'Ubuntu'
 
 - name: Add Docker GPG apt Key (Ubuntu)
@@ -17,7 +21,7 @@
   rpm_key:
     key: https://download.docker.com/linux/centos/gpg
     state: present
-  when: ansible_distribution == 'Centos'
+  when: ansible_distribution == 'CentOS'
     
 - name: Add Docker Repository (Ubuntu)
   apt_repository:
@@ -30,16 +34,41 @@
     name: docker-ce-stable
     state: present
     description: Docker ce Repo
-    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+    baseurl: https://download.docker.com/linux/centos/7/$basearch/stable
     gpgkey: https://download.docker.com/linux/centos/gpg
     gpgcheck: yes
-  when: ansible_distribution == 'Centos'
+  when: ansible_distribution == 'CentOS'
 
 - name: Update apt and install docker-ce
   apt: update_cache=yes name=docker-ce state=latest
   when: ansible_distribution == 'Ubuntu'
 
+- name: install docker-ce  (Centos)
+  yum: name=docker-ce state=latest
+  when: ansible_distribution == 'CentOS'
+
+- name: start docker    (Centos)
+  systemd:
+    name: docker
+    state: started
+  when: ansible_distribution == 'CentOS'
+
 - name: Install Docker Module for Python
   pip:
     name: docker
-  when: ansible_distribution == 'Ubuntu'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
