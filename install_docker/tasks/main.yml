@@ -1,37 +1,45 @@
 - name: Install aptitude using apt
   apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install required system packages
   apt: name={{ item }} state=latest update_cache=yes
   loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python-pip', 'virtualenv', 'python-setuptools']
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Add Docker GPG apt Key
+- name: Add Docker GPG apt Key (Ubuntu)
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
     state: present
+  when: ansible_distribution == 'Ubuntu'
 
-- name: Add Docker Repository
+- name: Add Docker GPG key. (Centos)
+  rpm_key:
+    key: https://download.docker.com/linux/centos/gpg
+    state: present
+  when: ansible_distribution == 'Centos'
+    
+- name: Add Docker Repository (Ubuntu)
   apt_repository:
     repo: deb https://download.docker.com/linux/ubuntu bionic stable
     state: present
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Add Docker Repository  (Centos)
+  yum_repository:
+    name: docker-ce-stable
+    state: present
+    description: Docker ce Repo
+    baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+    gpgkey: https://download.docker.com/linux/centos/gpg
+    gpgcheck: yes
+  when: ansible_distribution == 'Centos'
 
 - name: Update apt and install docker-ce
   apt: update_cache=yes name=docker-ce state=latest
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Install Docker Module for Python
   pip:
     name: docker
-
-# - name: Pull default Docker image
-#  docker_image:
-#    name: "{{ default_container_image }}"
-#    source: pull
-
-# # Creates the number of containers defined by the variable create_containers, using values from vars file
-# - name: Create default containers
-#   docker_container:
-#     name: "{{ default_container_name }}{{ item }}"
-#     image: "{{ default_container_image }}"
-#     command: "{{ default_container_command }}"
-#     state: present
-#   with_sequence: count={{ create_containers }}
+  when: ansible_distribution == 'Ubuntu'
