@@ -1,15 +1,11 @@
 ---
 # tasks file for use_mssql
-- name: get get-pip.py
-  get_url:
-    url: https://bootstrap.pypa.io/get-pip.py
-    dest: ~/get-pip.py
-
-# - name: run get-pip.py script
-#  command: python get-pip.py
-
-- name: run get-pip.py script from control host
-  script: ~/get-pip.py  
+- name: open port 1433 for remote access(Ubuntu)
+  ufw:
+    port: 1433
+    proto: tcp
+    rule: allow
+  when: ansible_distribution == 'Ubuntu'
 
 - name: instal pymssql
   pip: 
@@ -17,16 +13,41 @@
 
 - name: make database
   mssql_db:
-    name: my_db
+    name: my_db_3
     state: present
     login_host: localhost
     login_user: SA
-    login_password: LiRong11821
+    login_password: PassWord1
 
-- name: sql file from Microsoft repo
+- name: templating sql script
+  template:
+    src: templates/sample.sql.j2
+    dest: /tmp/sample.sql
+    mode: '644'
+
+- name: copy databse zip file to guest
   copy:
-    src: ~/ansible/mssql/sample_data/sample.sql
+    src: ~/sample_data/caysqlseed.zip
     dest: /tmp
+
+- name: download unzip 
+  package:
+    name: unzip
+    state: latest
+
+# - name: make directory
+#  file:
+#    path: /var/opt/mssql
+#    state: directory
+
+- name: unzip database folder contains .bak file
+  unarchive:
+    src: /tmp/caysqlseed.zip
+    dest: /var/opt/mssql/
+    remote_src: yes
+    owner: packt
+    group: packt
+    mode: '744'
 
 - name: import the sql file
   mssql_db:
@@ -35,8 +56,8 @@
     target: /tmp/sample.sql
     login_host: localhost
     login_user: SA
-    login_password: LiRong11821
-
+    login_password: PassWord1
+    autocommit: yes
 
 
 

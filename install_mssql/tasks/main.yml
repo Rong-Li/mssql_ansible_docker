@@ -3,16 +3,17 @@
 
 - name: Pull mssql image
   docker_image:
-    name: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    name: mcr.microsoft.com/mssql/server:2017-GA-ubuntu
 
 - name: run docker image
   docker_container:
     env:
       ACCEPT_EULA: Y 
-      SA_PASSWORD: LiRong11821
+      SA_PASSWORD: PassWord1
       MSSQL_PID: Express
-    image: mcr.microsoft.com/mssql/server:2019-GA-ubuntu-16.04
+    image: mcr.microsoft.com/mssql/server:2017-GA-ubuntu
     name: mssql
     state: started
     ports: 1433:1433
+    volumes: /var/opt/mssql:/var/opt/mssql
   become: yes

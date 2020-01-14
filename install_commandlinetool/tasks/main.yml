@@ -22,7 +22,7 @@
     state: present
     description: Microsoft MSSQL commandline tool
     baseurl: https://packages.microsoft.com/rhel/7/prod
-    gpgkey: https://packages.microsoft.com/keys/microsoft.acs
+    gpgkey: https://packages.microsoft.com/keys/microsoft.asc
     gpgcheck: yes
   when: ansible_distribution == 'CentOS'
 

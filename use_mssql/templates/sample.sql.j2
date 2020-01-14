@@ -1,0 +1,9 @@
+USE master
+GO
+restore database {{ database_which }}
+FROM disk = '/var/opt/mssql/{{ database_which }}.bak' 
+WITH FILE = 1, NOUNLOAD, REPLACE, RECOVERY, 
+STATS = 5, 
+MOVE 'cayprodData'TO '/var/opt/mssql/data/{{ database_which }}.mdf', 
+MOVE 'cayprodLog' TO '/var/opt/mssql/data/{{ database_which }}.ldf'
+GO

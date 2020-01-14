@@ -1,2 +1,7 @@
 ---
 # vars file for use_mssql
+
+# database:
+#  - 'caysqlseed'
+#  - 'someseed'
+

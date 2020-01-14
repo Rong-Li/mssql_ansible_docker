@@ -1,7 +1,21 @@
 ---
 
 -
-  hosts: centos2
+  hosts: centos3
+
+  pre_tasks:
+    - pause:
+        prompt: "Choose a database to install:\n-caysqlseed\n-some database\n-some database"
+      register: userInput_database
+   
+    - set_fact:
+        database_which: "{{ userInput_database.user_input }}"
+        something: something
+        cacheable: no
+
+    - debug:
+        msg: "{{ database_which }}"
+
 
   roles:
     - install_docker
